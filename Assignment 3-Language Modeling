@@ -1,0 +1,70 @@
+Cleaning (Gunakan Regular Expression) :
+1. Hapus metadata/script, contoh <div class="references-small">. Hapus semua yang ada dalam tanda < >, termasuk tanda kurungnya.
+2. Hapus penjelasan kata/kalimat yang ada di dalam parentheses "()", contoh : "there is also an important legal (imposed by law)" -> "(imposed by law)" dihapus.
+2. Hapus semua digit termasuk tanda titik diantara digit, misal 123.5
+3. Hapus semua simbol kecuali titik. Titik nanti akan dipakai sebagai pemisah kalimat.
+3. Hapus semua blank space yang tidak perlu.
+
+Normalizing (Sebisa mungkin menggunakan Regular Expression):
+1. Split teks menjadi kalimat dengan batasan bahwa kalimat diakhiri dengan tanda titik.
+2. Hapus titik, dan tambahkan tag <s> dan </s> sebagai tanda awal dan akhir kalimat. 
+Contoh :
+Propaganda is a concerted set of messages aimed at influencing the opinions or behavior of large numbers of people. Instead of impartially providing information, propaganda in its most basic sense presents information in order to influence its audience.
+Menjadi :
+<s> Propaganda is a concerted set of messages aimed at influencing the opinions or behavior of large numbers of people </s>
+<s> Instead of impartially providing information propaganda in its most basic sense presents information in order to influence its audience </s>
+3. Ubah semua huruf menjadi lowercase.
+
+Counting Unigram and Bigram :
+Tuliskan fungsi untuk menghitung Unigram dan Bigram (<s> tidak perlu untuk unigram) menggunakan seluruh kalimat di corpus, kecuali 10 kalimat terakhir (untuk testing).
+
+Computing The Likelihood of a Sentence
+1. Tuliskan fungsi, yang jika diberikan sebuah sentence, akan mengoutputkan statistik berdasarkan : 
+- unigram saja
+- bigram saja
+
+Contoh tampilan hasil :
+
+Unigram model
+=====================================================
+wi    C(wi)    #words    P(wi)
+=====================================================
+det    22086    1086836    0.02032137323386417
+var    12852    1086836    0.011825151172762036
+en     13921    1086836    0.012808740233117047
+gång   1332     1086836    0.0012255758918548888
+en     13921    1086836    0.012808740233117047
+katt   15       1086836    1.3801530313681181e-05
+som    16790    1086836    0.015448512931113802
+hette  107      1086836    9.845091623759242e-05
+nils   84       1086836    7.728856975661462e-05
+</s>   62283    1086836    0.057306714168467
+=====================================================
+Prob. unigrams:   4.4922846219128876e-27 
+Perplexity:   431.2739967353978 
+
+Bigram model
+=====================================================
+wi    wi+1    Ci,i+1    C(i)    P(wi+1|wi)
+=====================================================
+<s>    det    5913    62283    0.09493762342854391
+det    var    4023    22086    0.1821515892420538
+var    en     753     12852    0.05859010270774977
+en     gång   695     13921    0.04992457438402414
+gång   en     23      1332     0.017267267267267267
+en     katt   5       13921    0.0003591695998850657
+katt   som    2       15       0.13333333333333333
+som    hette  50      16790    0.0029779630732578916
+hette  nils   0       107      0.0    *backoff:    7.728856975661462e-05
+nils   </s>   2       84       0.023809523809523808
+=====================================================
+Prob. bigrams:   2.292224542392586e-19 
+Perplexity:   73.10957919390972
+
+2. Cobakan fungsi likelihood tersebut pada 20 kalimat terakhir (10 termasuk training corpus, 10 di luar training corpus)
+
+3. Buatlah solusi untuk permasalahan bigram yang tidak ada di training data.
+
+Report and Submission:
+1. Buatlah laporan maksimal 3 halaman A4 (1 halaman untuk screenshot hasil running), sesuai format yang telah dijelaskan.
+2. Submit laporan beserta sourcecode (zip)
