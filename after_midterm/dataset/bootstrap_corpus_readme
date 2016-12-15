@@ -1,0 +1,17 @@
+
+- 1.5M token bootstrapped dataset of pos-tagged microblog messages
+
+- Accuracy around 97.5%
+
+- Full PTB tagset, plus four custom tags (USR, HT, RT, URL)
+
+Creation detailed in paper below. Please acknowledge this if you use the 
+dataset in your work.
+
+
+
+ L. Derczynski, A. Ritter, S. Clarke, and K. Bontcheva, 2013: "Twitter 
+  Part-of-Speech Tagging for All: Overcoming Sparse and Noisy Data". In:
+  Proceedings of the International Conference on Recent Advances in Natural
+  Language Processing.
+
