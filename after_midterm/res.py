@@ -1,6 +1,109 @@
+RAW = 'raw'
+TAG_TOKENS = 'tag_token'
+PREPROCESSED_SENTENCE = 'sentence'
+PREPROCESSED_TAGS = 'tags'
+EMISSION_CPT = 'emision'
+TRANSITION_UNIGRAM = 'unigram'
+TRANSITION_BIGRAM = 'bigram'
+TRANSITION_TRIGRAM = 'trigram'
+
+
 class DataSet(object):
-    Training = {'address': 'dataset/training.txt'}
-    Testing = {'address': 'dataset/testing.txt'}
+    Training = {RAW: 'dataset/training.txt',
+                TAG_TOKENS: 'dataset/training_tag_tokens.txt',
+                PREPROCESSED_SENTENCE: 'dataset/training_sentence.txt',
+                PREPROCESSED_TAGS: 'dataset/training_tags.txt',
+                EMISSION_CPT: 'dataset/training_emission_cpt.txt',
+                TRANSITION_UNIGRAM: 'dataset/training_transition_unigram_cpt.txt',
+                TRANSITION_BIGRAM: 'dataset/training_transition_bigram_cpt.txt',
+                TRANSITION_TRIGRAM: 'dataset/training_transition_trigram_cpt.txt'}
+    Testing = {RAW: 'dataset/testing.txt',
+               TAG_TOKENS: 'dataset/testing_tag_tokens.txt',
+               PREPROCESSED_SENTENCE: 'dataset/testing_sentence.txt',
+               PREPROCESSED_TAGS: 'dataset/testing_tags.txt',
+               EMISSION_CPT: 'dataset/testing_emission_cpt.txt',
+               TRANSITION_UNIGRAM: 'dataset/testing_transition_unigram_cpt.txt',
+               TRANSITION_BIGRAM: 'dataset/testing_transition_bigram_cpt.txt',
+               TRANSITION_TRIGRAM: 'dataset/testing_transition_trigram_cpt.txt'}
+
+
+PTB_POS_TAGS = [
+    '$',
+    '``',
+    '\'\'',
+    '(',
+    ')',
+    ',',
+    '--',
+    '.',
+    ':',
+    'CC',
+    'CD',
+    'DT',
+    'EX',
+    'FW',
+    'IN',
+    'JJ',
+    'JJR',
+    'JJS',
+    'LS',
+    'MD',
+    'NN',
+    'NNP',
+    'NNPS',
+    'NNS',
+    'PDT',
+    'POS',
+    'PRP',
+    'PRP$',
+    'RB',
+    'RBR',
+    'RBS',
+    'RP',
+    'SYM',
+    'TO',
+    'UH',
+    'VB',
+    'VBD',
+    'VBG',
+    'VBN',
+    'VBP',
+    'VBZ',
+    'WDT',
+    'WP',
+    'WP$',
+    'WRB',
+    'USR',
+    'HT',
+    'RT',
+    'URL',
+]  # http://www.comp.leeds.ac.uk/ccalas/tagsets/upenn.html
+
+
+# Bikel et. al 1999, named entity recognition, +OtherCap (LoL, aWWk)
+class LowFrequency(object):
+    TwoDigitNum = '[twoDigitNum]'
+    FourDigitNum = '[fourDigitNum]'
+    ContainsDigitAndAlpha = '[containsDigitAndAlpha]'
+    ContainsDigitAndDash = '[containsDigitAndDash]'
+    ContainsDigitAndSlash = '[containsDigitAndSlash]'
+    ContainsDigitAndComma = '[containsDigitAndComma]'
+    ContainsDigitAndPeriod = '[containsDigitAndPeriod]'
+    OtherNum = '[otherNum]'
+    AllCaps = '[allCaps]'
+    CapPeriod = '[capPeriod]'
+    FirstWord = '[firstWord]'
+    InitCap = '[initCap]'
+    Lowercase = '[lowercase]'
+    Other = '[other]'
+    OtherCap = '[otherCap]'
+
+
+class TwitterWord(object):
+    URL = '[http]'
+    HT = '[hashtag]'
+    USER = '[user]'
+    SYMBOL = '[symbol]'
 
 
 def is_ascii(text):
@@ -54,11 +157,20 @@ def re_dump_processed(address, sentences, tags_chain):
     save_data(address, sentences_rejoined)
 
 
-def load_data(data_type):
-    the_file = open(data_type['address'])
+def load_data(data_set_type, quality=RAW):
+    the_file = open(data_set_type[quality])
     data_set = list()
     for line in the_file:
         data_set.append(line[:-1])
+    return data_set
+
+
+def load_data_with_split(data_set_type, quality=RAW, split_char=' '):
+    the_file = open(data_set_type[quality])
+    data_set = list()
+    for line in the_file:
+        line = line[:-1].split(split_char)
+        data_set.append(line)
     return data_set
 
 if __name__ == '__main__':
