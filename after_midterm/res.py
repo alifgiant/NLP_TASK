@@ -28,6 +28,7 @@ class DataSet(object):
 
 
 PTB_POS_TAGS = [
+    # '*',
     '$',
     '``',
     '\'\'',

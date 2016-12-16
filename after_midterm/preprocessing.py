@@ -98,7 +98,7 @@ def do_pre_processing(training_data, dataset_type):
             if word_counter[word] < 5:
                 if word == splits[0]:
                     word = '**' + word
-                word = normalize_low_freq(word)
+                word = normalize_low_freq(word)  # normalize low freq
             normalized.append(word)
             word_normalize_counter[word] += 1
         normalized = ' '.join(normalized)

@@ -2,6 +2,7 @@ from collections import Counter
 import time
 import res
 import json
+import viterbi
 import numpy as np
 # ------------------------------------------------------------------------ #
 
@@ -10,7 +11,7 @@ start = time.time()
 ' 1. Pre processing
 ' uncomment to re-do pre processing
 '''
-# # region pre processing
+# region pre processing
 # import preprocessing
 # data_set = res.load_data(res.DataSet.Training, res.RAW)
 # # data_set = res.load_data(res.DataSet.Testing, res.RAW)
@@ -19,26 +20,26 @@ start = time.time()
 # # endregion
 
 stop_pre_processing = time.time()
-print ('execution pre processing:', stop_pre_processing - start)
+# print ('execution pre processing:', stop_pre_processing - start)
+
+'''1.5 load pre processing result'''
+sentences = res.load_data(res.DataSet.Training, res.PREPROCESSED_SENTENCE)
+tag_chains = res.load_data(res.DataSet.Training, res.PREPROCESSED_TAGS)
+temp_tag_token_counter = res.load_data_with_split(res.DataSet.Training, res.TAG_TOKENS, split_char=' ')
+# sentences = res.load_data(res.DataSet.Testing, res.PREPROCESSED_SENTENCE)
+# tag_chain = res.load_data(res.DataSet.Testing, res.PREPROCESSED_TAGS)
+# temp_tag_token_counter = res.load_data_with_split(res.DataSet.Testing, res.TAG_TOKENS, split_char=' ')
 
 '''
 ' 2. Processing
 ' uncomment to re-do processing
 '''
-# '''1.5 load pre processing result'''
-# sentences = res.load_data(res.DataSet.Training, res.PREPROCESSED_SENTENCE)
-# tag_chains = res.load_data(res.DataSet.Training, res.PREPROCESSED_TAGS)
-# temp_tag_token_counter = res.load_data_with_split(res.DataSet.Training, res.TAG_TOKENS, split_char=' ')
-# # sentences = res.load_data(res.DataSet.Testing, res.PREPROCESSED_SENTENCE)
-# # tag_chain = res.load_data(res.DataSet.Testing, res.PREPROCESSED_TAGS)
-# # temp_tag_token_counter = res.load_data_with_split(res.DataSet.Testing, res.TAG_TOKENS, split_char=' ')
-#
-# tag_token_counter = Counter()
-# for row in temp_tag_token_counter:  # return saved data to counter
-#     tag_token_counter[row[0]] = int(row[1])
-# # region processing
-# import processing
-# processing.do_processing(res.DataSet.Testing, sentences, tag_chains, tag_token_counter)
+tag_token_counter = Counter()
+for row in temp_tag_token_counter:  # return saved data to counter
+    tag_token_counter[row[0]] = int(row[1])
+# region processing
+import processing
+processing.do_processing(res.DataSet.Testing, sentences, tag_chains, tag_token_counter)
 # processing.do_processing(res.DataSet.Training, sentences, tag_chains, tag_token_counter)
 stop_processing = time.time()
 print ('execution processing:', stop_processing-stop_pre_processing)
@@ -60,7 +61,19 @@ with open(res.DataSet.Training[res.TRANSITION_BIGRAM]) as json_data:
 with open(res.DataSet.Training[res.TRANSITION_TRIGRAM]) as json_data:
     transition_trigram = json.load(json_data)
 
-
+# i = 0
+tag_match = 0
+for sentence in sentences:
+    # print ('-------------', i)
+    tags = viterbi.get_predicted_tag(sentence, word_emission, transition_unigram, transition_bigram, transition_trigram)
+    # print ('sentence', sentence.split(' '))
+    # print ('tags', tag_chains[i].split(' '))
+    # print ('predict1', tags)
+    # print ('predict2', viterbi.decode_tags(tags))
+        # if i == 10:
+        #     break
+    # i += 1
+    # break
 
 # endregion
 stop_testing = time.time()

@@ -402,8 +402,14 @@ Subsubsection text here.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-
-
+\section{Processing}
+Data then processed using a Hidden Markov Model (HMM) classifier with viterbi algorithm. HMM is chosen because it's simplecity and high accuracy for P.o.S Tagging\cite{1,2}. HMM is a classifier belong to statistical/bayesian family based on transition and emision probability. An HMM model is folmulated to
+\[ P(w_1..n|tag_1..n) = \prod_{i=1}^n emission(w_i|t_i) \prod_{i=1}^n transition(t_i|t_{i-1}) \]
+Emision probability calculated using formula:
+\[ e = \frac{count(word_i, tag_i)+1}{count(tag_i)+\sum_{i=1}^n 1} \]
+Transition probability calculated using formula based on unigram matrix of the tags:
+\[ t = \frac{count(tag_i,tag_{i-1})+1}{count(tag_{i-1})+\sum_{i=1}^n 1} \]
+We do a smoothing to the formula of emission and transition, add 1 (+1) to each instance of word and tags. The smoothing done to eliminate 'zero (0) occurance of an instance'. 'zero occurance' must be eliminate because whenever a word or tag chain never appear on training corpus appear on testing corpus the probaility  of whole sentence hosted the word will return 0, and never be selected as possible outcome.
 
 \section{Conclusion}
 The conclusion goes here.

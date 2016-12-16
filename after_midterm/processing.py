@@ -3,6 +3,11 @@ import res
 import json
 
 
+k1 = 0.7
+k2 = 0.2
+k3 = 0.1
+
+
 def do_processing(dataset_type, sentences, tag_chains, tag_token_counter):
     # 1. build word-tags count, what possible tag for a word
     word_to_tag_count = dict()
@@ -88,3 +93,14 @@ def do_processing(dataset_type, sentences, tag_chains, tag_token_counter):
     res.save_data(dataset_type[res.TRANSITION_UNIGRAM], [json.dumps(transition_unigram)], end_flag=False)
     res.save_data(dataset_type[res.TRANSITION_BIGRAM], [json.dumps(transition_bigram)], end_flag=False)
     res.save_data(dataset_type[res.TRANSITION_TRIGRAM], [json.dumps(transition_trigram)], end_flag=False)
+
+
+def get_emission_probability(word, tag, emission_cpt):
+    return emission_cpt[word][tag]
+
+
+def get_smoothed_transition_probability(current_tag, last_1_tag, last_2_tag, transition_unigram,
+                                        transition_bigram, transition_trigram):
+    return k1*transition_trigram[current_tag][last_1_tag][last_2_tag] \
+           + k2*transition_bigram[current_tag][last_1_tag] \
+           + k3*transition_unigram[current_tag]
