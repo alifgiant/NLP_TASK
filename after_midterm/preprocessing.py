@@ -114,17 +114,26 @@ def do_pre_processing(training_data, dataset_type):
     # print (word_normalize_counter.keys())
 
     # 5. save sentence normalized
-    res.save_data(dataset_type[res.PREPROCESSED_SENTENCE], sentence_normalize, end_flag=False)
-    res.save_data(dataset_type[res.PREPROCESSED_TAGS], tags_raw, end_flag=False)
-    res.save_data(dataset_type[res.TAG_TOKENS], [tag+' '+str(tag_counter[tag]) for tag in tag_counter], end_flag=False)
+    # res.save_data(dataset_type[res.PREPROCESSED_SENTENCE], sentence_normalize, end_flag=False)
+    # res.save_data(dataset_type[res.PREPROCESSED_TAGS], tags_raw, end_flag=False)
+    res.save_data(dataset_type[res.TAG_TOKENS], [tag+' '+str(tag_counter[tag]) for tag in sorted(tag_counter)],
+                  end_flag=False)
 
 
 if __name__ == '__main__':
-    # print (normalize_low_freq('90/'))
-    word = 'Http://www.google.com'
-    # result = re.search('[A-Z]+', word)
-    # if result.group(0) == word:
-    res = re.search('http://|Http://', word)
-    print (res is None)
-    print (res.group(0))
+    # region pre processing
+    # import preprocessing
+    # data_set = res.load_data(res.DataSet.Training, res.RAW)
+    # do_pre_processing(data_set, res.DataSet.Training)
+    #
+    # data_set = res.load_data(res.DataSet.Testing, res.RAW)
+    # do_pre_processing(data_set, res.DataSet.Testing)
+    # # endregion
+    # temp_tag_token_counter = res.load_data_with_split(res.DataSet.Training, res.TAG_TOKENS, split_char=' ')
+    temp_tag_token_counter = res.load_data_with_split(res.DataSet.Testing, res.TAG_TOKENS, split_char=' ')
+    import numpy as np
+    temp_tag_token_counter = np.array(temp_tag_token_counter)
+    temp_tag_token_counter = temp_tag_token_counter[:, 1].astype(int)
+
+    print (np.sum(temp_tag_token_counter))
 
